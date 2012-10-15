@@ -7,5 +7,5 @@ A jekyll plug-in that provides a Liquid filter for emojifying text with [Gemoji]
 - Make the `./images/emoji/` directory
  
 ## Usage: 
-- Apply the filter wherever needed e.g. {{ content | emojify }}
+- Apply the filter wherever needed e.g. `{{ content | emojify }}`
 - Add some emoji to your article! e.g. `Hello :wink:`
