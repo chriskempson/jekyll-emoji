@@ -10,7 +10,7 @@
 # Installation:
 #   - Run `gem install gemoji` or add `gem 'gemoji'` to your gemfile and run `bundle install`
 #   - Copy this file to your `_plugins` directory
-#   - Add a line like `emoji: ./images/emoji` to your `_config.yml`
+#   - Add a line like `emoji_dir: images/emoji` to your `_config.yml`
 # 
 # Usage: 
 #   - Apply the filter wherever needed e.g. {{ content | emojify }}
