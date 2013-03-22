@@ -2,6 +2,7 @@
 A jekyll plug-in that provides a Liquid filter for emojifying text with [Gemoji](https://github.com/github/gemoji). See [Emoji Cheat Sheet](http://www.emoji-cheat-sheet.com) for a full listing of emoji codes.
 
 ## Installation
+- Ensure you have the Gemoji gem installed (`gem install gemoji` or add `gem 'gemoji'` to your gemfile and run `bundle install`).
 - Copy this file to your `_plugins` directory
 - Add a line like `emoji: ./images/emoji` to your `_config.yml`
 - Make the `./images/emoji/` directory
