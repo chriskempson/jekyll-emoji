@@ -29,7 +29,9 @@ module Jekyll
       emoji_dir = File.join(config['source'], config['emoji_dir'])
 
       content.to_str.gsub(/:([a-z0-9\+\-_]+):/) do |match|
-        if Emoji.names.include?($1) and emoji_dir
+        if Emoji.names.include?($1) and config['emoji_external']
+          '<img alt="' + $1 + '" src="' + config['emoji_dir'] + "/#{$1}.png" + '" class="emoji" />'
+        elsif Emoji.names.include?($1) and emoji_dir
           '<img alt="' + $1 + '" src="/' + config['emoji_dir'] + "/#{$1}.png" + '" class="emoji" />'
         else
           match
@@ -42,6 +44,8 @@ module Jekyll
   class EmojiGenerator < Generator
     def generate(site)
       config = site.config
+      return false if config['emoji_external']
+
       emoji_dir = File.join(config['source'], config['emoji_dir'])
 
       return false if File.exist?(emoji_dir + '/smiley.png')
