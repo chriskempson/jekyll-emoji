@@ -11,6 +11,7 @@
 #   - Run `gem install gemoji` or add `gem 'gemoji'` to your gemfile and run `bundle install`
 #   - Copy this file to your `_plugins` directory
 #   - Add a line like `emoji_dir: images/emoji` to your `_config.yml`
+#   - If you want to use external source for emoji, set `emoji_dir: http://...` to your `_config.yml`.
 # 
 # Usage: 
 #   - Apply the filter wherever needed e.g. {{ content | emojify }}
@@ -27,12 +28,15 @@ module Jekyll
 
       config = @context.registers[:site].config
       emoji_dir = File.join(config['source'], config['emoji_dir'])
+      if emoji_dir
+        if not emoji_dir.start_with?('http')
+          emoji_dir = '/' + emoji_dir
+        end
+      end
 
       content.to_str.gsub(/:([a-z0-9\+\-_]+):/) do |match|
-        if Emoji.names.include?($1) and config['emoji_external']
-          '<img alt="' + $1 + '" src="' + config['emoji_dir'] + "/#{$1}.png" + '" class="emoji" />'
-        elsif Emoji.names.include?($1) and emoji_dir
-          '<img alt="' + $1 + '" src="/' + config['emoji_dir'] + "/#{$1}.png" + '" class="emoji" />'
+        if Emoji.names.include?($1) and emoji_dir
+          '<img alt="' + $1 + '" src="' + emoji_dir + "/#{$1}.png" + '" class="emoji" />'
         else
           match
         end
@@ -44,9 +48,8 @@ module Jekyll
   class EmojiGenerator < Generator
     def generate(site)
       config = site.config
-      return false if config['emoji_external']
-
       emoji_dir = File.join(config['source'], config['emoji_dir'])
+      return false if emoji_dir.start_with?('http')
 
       return false if File.exist?(emoji_dir + '/smiley.png')
 
