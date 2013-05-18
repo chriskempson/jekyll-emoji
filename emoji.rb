@@ -27,10 +27,11 @@ module Jekyll
       return false if !content
 
       config = @context.registers[:site].config
-      emoji_dir = File.join(config['source'], config['emoji_dir'])
-      if emoji_dir
-        if not emoji_dir.start_with?('http')
-          emoji_dir = '/' + emoji_dir
+      if config['emoji_dir']
+        if config['emoji_dir'].start_with?('http')
+          emoji_dir = config['emoji_dir']
+        else
+          emoji_dir = '/' + File.join(config['source'], config['emoji_dir'])
         end
       end
 
@@ -48,9 +49,9 @@ module Jekyll
   class EmojiGenerator < Generator
     def generate(site)
       config = site.config
+      return false if not config['emoji_dir']
+      return false if config['emoji_dir'].start_with?('http')
       emoji_dir = File.join(config['source'], config['emoji_dir'])
-      return false if emoji_dir.start_with?('http')
-
       return false if File.exist?(emoji_dir + '/smiley.png')
 
       # Make Emoji directory
