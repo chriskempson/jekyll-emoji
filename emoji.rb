@@ -28,11 +28,7 @@ module Jekyll
 
       config = @context.registers[:site].config
       if config['emoji_dir']
-        if config['emoji_dir'].start_with?('http')
-          emoji_dir = config['emoji_dir']
-        else
-          emoji_dir = '/' + File.join(config['source'], config['emoji_dir'])
-        end
+        emoji_dir = config['emoji_dir']
       end
 
       content.to_str.gsub(/:([a-z0-9\+\-_]+):/) do |match|
@@ -52,14 +48,18 @@ module Jekyll
       return false if not config['emoji_dir']
       return false if config['emoji_dir'].start_with?('http')
       emoji_dir = File.join(config['source'], config['emoji_dir'])
-      return false if File.exist?(emoji_dir + '/smiley.png')
+      return false if File.exist?(File.join(emoji_dir, 'smiley.png'))
+
+      puts "           Copying: Emoji from Gemoji to " + config['emoji_dir']
 
       # Make Emoji directory
       FileUtils.mkdir_p(emoji_dir)
 
       # Copy Gemoji files
-      Dir["#{Emoji.images_path}/emoji/*.png"].each do |src|
-        FileUtils.cp src, emoji_dir
+      unicode_emoji_dir = File.join(Emoji.images_path, 'emoji')
+      Emoji.all.each do |em|
+        # Use the name rather than the unicode character
+        FileUtils.cp File.join(unicode_emoji_dir, em.image_filename), File.join(emoji_dir, em.name + '.png')
       end
     end
   end
